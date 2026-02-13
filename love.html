@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我喜欢你郑维钰</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #000000; /* 纯黑色背景 */
+            overflow: hidden;
+            height: 100vh;
+            font-family: "Microsoft YaHei", sans-serif;
+            position: relative;
+        }
+
+        /* 爱心容器 */
+        .heart-container {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* 飘动画爱心样式 */
+        .heart {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            background-color: #ff3366; /* 亮红色爱心 */
+            transform: rotate(45deg);
+            animation: float 8s ease-in-out infinite;
+            opacity: 0.9;
+        }
+
+        /* 爱心伪元素制作完整心形 */
+        .heart::before,
+        .heart::after {
+            content: '';
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            background-color: #ff3366;
+            border-radius: 50%;
+        }
+
+        .heart::before {
+            top: -15px;
+            left: 0;
+        }
+
+        .heart::after {
+            top: 0;
+            left: -15px;
+        }
+
+        /* 爱心漂浮动画 */
+        @keyframes float {
+            0% {
+                transform: rotate(45deg) translateY(100vh) scale(0.5);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.9;
+            }
+            90% {
+                opacity: 0.9;
+            }
+            100% {
+                transform: rotate(45deg) translateY(-50px) scale(1.2);
+                opacity: 0;
+            }
+        }
+
+        /* 大爱心容器 - 适配文字尺寸 */
+        .big-heart-wrapper {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 10;
+            width: 380px;   /* 缩小到刚好包裹文字 */
+            height: 350px;  /* 缩小到刚好包裹文字 */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* 大爱心形状 - 适配文字尺寸 */
+        .big-heart {
+            position: relative;
+            width: 380px;   /* 缩小到刚好包裹文字 */
+            height: 350px;  /* 缩小到刚好包裹文字 */
+            background-color: rgba(255, 51, 102, 0.8);
+            transform: rotate(45deg);
+            box-shadow: 0 0 30px rgba(255, 51, 102, 1), 0 0 60px rgba(255, 51, 102, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: bigHeartPulse 3s ease-in-out infinite;
+        }
+
+        /* 大爱心伪元素 - 适配文字尺寸 */
+        .big-heart::before,
+        .big-heart::after {
+            content: '';
+            position: absolute;
+            width: 380px;   /* 缩小到刚好包裹文字 */
+            height: 350px;  /* 缩小到刚好包裹文字 */
+            background-color: rgba(255, 51, 102, 0.8);
+            border-radius: 50%;
+            box-shadow: 0 0 30px rgba(255, 51, 102, 1), 0 0 60px rgba(255, 51, 102, 0.7);
+        }
+
+        .big-heart::before {
+            top: -175px;    /* 对应高度的一半，适配缩小后的尺寸 */
+            left: 0;
+        }
+
+        .big-heart::after {
+            top: 0;
+            left: -175px;   /* 对应宽度的一半，适配缩小后的尺寸 */
+        }
+
+        /* 大爱心内的文字容器 */
+        .text-inside-heart {
+            position: absolute;
+            transform: rotate(-45deg); /* 抵消大爱心的旋转，让文字正显示 */
+            text-align: center;
+            z-index: 11;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;      /* 缩小行间距，适配小爱心 */
+            width: 100%;
+        }
+
+        /* 文字行样式 */
+        .text-row {
+            display: flex;
+            justify-content: center;
+            gap: 15px;      /* 缩小字符间距，适配小爱心 */
+        }
+
+        /* 文字样式 - 适配小爱心 */
+        .char-text {
+            font-size: 36px;/* 缩小字体，适配小爱心 */
+            color: #ffffff;
+            font-weight: bold;
+            text-shadow: 0 0 10px #000, 0 0 20px rgba(255, 255, 255, 0.8);
+            opacity: 0;
+            animation: textShow 2s ease forwards;
+        }
+
+        /* 第一行文字延迟 */
+        .text-row:first-child .char-text:nth-child(1) { animation-delay: 0.5s; }
+        .text-row:first-child .char-text:nth-child(2) { animation-delay: 0.8s; }
+        .text-row:first-child .char-text:nth-child(3) { animation-delay: 1.1s; }
+        .text-row:first-child .char-text:nth-child(4) { animation-delay: 1.4s; }
+
+        /* 第二行文字延迟 */
+        .text-row:last-child .char-text:nth-child(1) { animation-delay: 1.7s; }
+        .text-row:last-child .char-text:nth-child(2) { animation-delay: 2.0s; }
+        .text-row:last-child .char-text:nth-child(3) { animation-delay: 2.3s; }
+
+        /* 大爱心脉动动画 - 适配小爱心 */
+        @keyframes bigHeartPulse {
+            0% {
+                transform: rotate(45deg) scale(1);
+                box-shadow: 0 0 30px rgba(255, 51, 102, 1), 0 0 60px rgba(255, 51, 102, 0.7);
+            }
+            50% {
+                transform: rotate(45deg) scale(1.05);
+                box-shadow: 0 0 40px rgba(255, 51, 102, 1), 0 0 80px rgba(255, 51, 102, 0.9);
+            }
+            100% {
+                transform: rotate(45deg) scale(1);
+                box-shadow: 0 0 30px rgba(255, 51, 102, 1), 0 0 60px rgba(255, 51, 102, 0.7);
+            }
+        }
+
+        /* 文字显示动画 */
+        @keyframes textShow {
+            0% {
+                opacity: 0;
+                transform: scale(0);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        /* 烟花容器 */
+        .fireworks-container {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 5;
+        }
+
+        /* 烟花粒子样式（固定12px） */
+        .firework {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            animation: firework 2.5s ease-out forwards;
+            opacity: 0;
+            box-shadow: 0 0 20px currentColor, 0 0 40px currentColor;
+            color: #ff3366;
+        }
+
+        /* 烟花爆炸动画 */
+        @keyframes firework {
+            0% {
+                opacity: 1;
+                transform: translate(0, 0) scale(0);
+                box-shadow: 0 0 0 currentColor;
+            }
+            50% {
+                opacity: 1;
+                box-shadow: 0 0 30px currentColor, 0 0 60px currentColor;
+            }
+            100% {
+                opacity: 0;
+                transform: translate(var(--tx), var(--ty)) scale(1.5);
+                box-shadow: 0 0 10px currentColor;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 背景音乐 -->
+    <audio id="bg-music" loop autoplay>
+        <source src="love-music.mp3" type="audio/mpeg">
+        您的浏览器不支持音频播放
+    </audio>
+
+    <!-- 烟花容器 -->
+    <div class="fireworks-container" id="fireworksContainer"></div>
+
+    <!-- 爱心容器 -->
+    <div class="heart-container" id="heartContainer"></div>
+
+    <!-- 大爱心容器（刚好包裹文字） -->
+    <div class="big-heart-wrapper">
+        <!-- 大爱心形状 -->
+        <div class="big-heart"></div>
+        <!-- 爱心内的文字 -->
+        <div class="text-inside-heart">
+            <!-- 第一行：我喜欢你 -->
+            <div class="text-row">
+                <span class="char-text">我</span>
+                <span class="char-text">喜</span>
+                <span class="char-text">欢</span>
+                <span class="char-text">你</span>
+            </div>
+            <!-- 第二行：郑维钰 -->
+            <div class="text-row">
+                <span class="char-text">郑</span>
+                <span class="char-text">维</span>
+                <span class="char-text">钰</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ===================== 飘动爱心功能 =====================
+        function createHearts() {
+            const container = document.getElementById('heartContainer');
+            const heartCount = 60;
+
+            for (let i = 0; i < heartCount; i++) {
+                createSingleHeart(container);
+            }
+        }
+
+        function createSingleHeart(container) {
+            const heart = document.createElement('div');
+            heart.classList.add('heart');
+            
+            const left = Math.random() * 100;
+            const size = Math.random() * 25 + 10;
+            const delay = Math.random() * 15;
+            const duration = Math.random() * 10 + 8;
+
+            heart.style.left = `${left}vw`;
+            heart.style.width = `${size}px`;
+            heart.style.height = `${size}px`;
+            heart.style.animationDelay = `${delay}s`;
+            heart.style.animationDuration = `${duration}s`;
+            
+            const opacity = Math.random() * 0.5 + 0.5;
+            const hue = Math.random() * 15 + 345;
+            const bgColor = `hsla(${hue}, 100%, 55%, ${opacity})`;
+            heart.style.backgroundColor = bgColor;
+            
+            const style = document.createElement('style');
+            style.textContent = `
+                #heartContainer .heart:last-child::before,
+                #heartContainer .heart:last-child::after {
+                    background-color: ${bgColor} !important;
+                }
+            `;
+            document.head.appendChild(style);
+
+            container.appendChild(heart);
+
+            setTimeout(() => {
+                heart.remove();
+                style.remove();
+                setTimeout(() => {
+                    createSingleHeart(container);
+                }, Math.random() * 3000);
+            }, (delay + duration) * 1000);
+        }
+
+        // ===================== 醒目烟花功能 =====================
+        function createFirework(x, y) {
+            const container = document.getElementById('fireworksContainer');
+            const particleCount = 120;
+            const colors = ['#ff3366', '#ff0055', '#ff6688', '#ff99aa', '#ffccdd'];
+
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('firework');
+                
+                const angle = Math.random() * Math.PI * 2;
+                const distance = Math.random() * 350 + 100;
+                const tx = Math.cos(angle) * distance;
+                const ty = Math.sin(angle) * distance;
+                
+                particle.style.left = `${x}px`;
+                particle.style.top = `${y}px`;
+                particle.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                particle.style.color = particle.style.backgroundColor;
+                particle.style.setProperty('--tx', `${tx}px`);
+                particle.style.setProperty('--ty', `${ty}px`);
+                particle.style.animationDelay = `${Math.random() * 0.5}s`;
+
+                container.appendChild(particle);
+
+                setTimeout(() => {
+                    particle.remove();
+                }, 2500);
+            }
+        }
+
+        // 定时创建烟花
+        function startFireworks() {
+            setTimeout(() => {
+                setInterval(() => {
+                    const x = Math.random() * window.innerWidth;
+                    const y = Math.random() * window.innerHeight * 0.8;
+                    createFirework(x, y);
+                }, 1500);
+            }, 1000);
+        }
+
+        // ===================== 页面初始化 =====================
+        window.onload = function() {
+            createHearts();
+            startFireworks();
+            
+            // 处理音频自动播放
+            document.addEventListener('click', function() {
+                const audio = document.getElementById('bg-music');
+                audio.play().catch(err => console.log('音频需要用户交互才能播放:', err));
+            });
+
+            // 点击页面触发更多烟花
+            document.addEventListener('click', function(e) {
+                createFirework(e.clientX, e.clientY);
+                createFirework(e.clientX + 50, e.clientY - 30);
+                createFirework(e.clientX - 40, e.clientY + 20);
+            });
+        };
+    </script>
+</body>
+</html>
